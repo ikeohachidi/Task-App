@@ -1,7 +1,13 @@
 import "package:flutter/material.dart";
+import 'package:task_app/providers/activityList_provider.dart';
 import "package:task_app/widgets/dateButton.dart";
+import 'package:flutter/gestures.dart';
 
 class DateList extends StatelessWidget {
+  final ActivityListProvider provider;
+
+  DateList({this.provider});
+
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
       // todo fix this i want the scroll button to have absolute dominance
@@ -10,7 +16,7 @@ class DateList extends StatelessWidget {
           height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: Dates().widgets
+            children: Dates(provider: provider).widgets
           ),
         ),
       ),
@@ -18,6 +24,10 @@ class DateList extends StatelessWidget {
   }
 }
 
+
+// Dates class builds the DateButton widget with proper dates 
+// It receives a provider so the app can be notified when one of the button on the
+// widget is clicked and can process the date also
 class Dates {
   DateTime date = new DateTime.now();
 
@@ -46,14 +56,14 @@ class Dates {
     "Sun"
   ];
 
-  String dayAndWeekDay;
-
   List<Widget> widgets = [];
   var dateSet = new Set();
 
   Map<String, List<Map<String, String>>> monthsMap = new Map();
 
-  Dates() {
+  final ActivityListProvider provider;
+
+  Dates({this.provider}) {
     for (var i = 0; i < 60; ++i) {
       DateTime newDate = date.add(Duration(days: i));
 
@@ -102,10 +112,25 @@ class Dates {
                 List<Widget> dateButtonList = [];
                 dateAndDay.forEach((f) {
                   dateButtonList.add(
-                    Container(
-                      margin: EdgeInsets.only(right: 15),
-                      child: DateButton(date: f["date"], day: f["day"])
-                    )
+                    // Without RawGestureDetector the child DateButton child widget wins the
+                    // battle for the onTap event and this tap won't work
+                      RawGestureDetector(
+                        gestures: <Type, GestureRecognizerFactory>{
+                          AllowMultipleGestureRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleGestureRecognizer>(
+                            () => AllowMultipleGestureRecognizer(),
+                            (AllowMultipleGestureRecognizer instance) {
+                              instance.onTap = () => {
+                                provider.setChosenDate = "${month.substring(0, 3)} ${f["date"]} ${f["day"]}"
+                              };
+                            }
+                          ),
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          margin: EdgeInsets.only(right: 15),
+                          child: DateButton(month: month, date: f["date"], day: f["day"], provider: provider)
+                        ),
+                      )
                   );
                 });
                 return dateButtonList;
@@ -117,5 +142,11 @@ class Dates {
     });
 
   }
+}
 
+class AllowMultipleGestureRecognizer extends TapGestureRecognizer {
+  @override
+  void rejectGesture(int pointer) {
+    acceptGesture(pointer);
+  }
 }
