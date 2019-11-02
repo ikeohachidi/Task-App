@@ -4,6 +4,7 @@ import 'package:task_app/providers/activityList_provider.dart';
 import 'package:task_app/widgets/activityList.dart';
 import 'package:task_app/widgets/topBar.dart';
 import 'package:task_app/widgets/dateList.dart';
+import "package:task_app/screen/taskScreen.dart";
 
 
 void main() {
@@ -17,16 +18,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ActivityListProvider>(
-      builder: (_) => ActivityListProvider(""),
+      builder: (_) => ActivityListProvider(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
 
           primarySwatch: Colors.blue,
+          primaryColor: Colors.deepPurple,
+          primaryColorLight: Color.fromRGBO(230, 230, 230, 0.5),
           fontFamily: 'Muli',
-          backgroundColor: Colors.white
+          backgroundColor: Colors.white,
         ),
         home: MyHomePage(),
+        routes: {
+          TaskScreen.routeName: (context) => TaskScreen()
+        }
       )
     );
   }
@@ -58,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   margin: EdgeInsets.only(top: 0),
                 ),
-                DateList(provider: chosenDate),
+                DateList(),
                 Padding(
                   padding: EdgeInsets.only(left: 8, right: 8),
                   child: Align(
@@ -69,13 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         text: TextSpan(text: "Choose activity: ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 22,
                             fontFamily: "Muli",
                             color: Colors.black
                           ),
                           children: [
-                            TextSpan(text: chosenDate.getDate,
-                              style: TextStyle(fontWeight: FontWeight.normal)
+                            TextSpan(text: chosenDate.builtDate,
+                              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20)
                             )
                           ]
                         )
