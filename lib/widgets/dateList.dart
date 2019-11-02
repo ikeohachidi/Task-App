@@ -1,22 +1,25 @@
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 import 'package:task_app/providers/activityList_provider.dart';
 import "package:task_app/widgets/dateButton.dart";
 import 'package:flutter/gestures.dart';
 
 class DateList extends StatelessWidget {
-  final ActivityListProvider provider;
-
-  DateList({this.provider});
 
   Widget build(BuildContext context) {
+    final ActivityListProvider provider = Provider.of<ActivityListProvider>(context);
+
     return Row(children: <Widget>[
       // todo fix this i want the scroll button to have absolute dominance
       Expanded(
-        child: SizedBox(
-          height: 100,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: Dates(provider: provider).widgets
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: SizedBox(
+            height: 100,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: Dates(provider).widgets
+            ),
           ),
         ),
       ),
@@ -61,9 +64,11 @@ class Dates {
 
   Map<String, List<Map<String, String>>> monthsMap = new Map();
 
+  // BuildContext context;
   final ActivityListProvider provider;
 
-  Dates({this.provider}) {
+  Dates(this.provider) {
+
     for (var i = 0; i < 60; ++i) {
       DateTime newDate = date.add(Duration(days: i));
 
@@ -119,8 +124,9 @@ class Dates {
                           AllowMultipleGestureRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleGestureRecognizer>(
                             () => AllowMultipleGestureRecognizer(),
                             (AllowMultipleGestureRecognizer instance) {
-                              instance.onTap = () => {
-                                provider.setChosenDate = "${month.substring(0, 3)} ${f["date"]} ${f["day"]}"
+                              instance.onTap = () {
+                                var dateActivity = DateActivity(day: f["day"], date: f["date"], month: month.substring(0, 3));
+                                provider.setChosenDate = dateActivity;
                               };
                             }
                           ),
@@ -128,7 +134,7 @@ class Dates {
                         behavior: HitTestBehavior.opaque,
                         child: Container(
                           margin: EdgeInsets.only(right: 15),
-                          child: DateButton(month: month, date: f["date"], day: f["day"], provider: provider)
+                          child: DateButton(month: month, date: f["date"], day: f["day"])
                         ),
                       )
                   );

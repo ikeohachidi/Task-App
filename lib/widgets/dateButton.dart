@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_app/providers/activityList_provider.dart';
 
 class DateButton extends StatefulWidget {
@@ -6,9 +7,9 @@ class DateButton extends StatefulWidget {
   final String day;
   final String month;
 
-  final ActivityListProvider provider;
+  // final ActivityListProvider provider;
 
-  DateButton({this.month, this.date, this.day, this.provider});
+  DateButton({this.month, this.date, this.day});
 
   @override
   _DateButtonState createState() => _DateButtonState();
@@ -18,7 +19,15 @@ class _DateButtonState extends State<DateButton> {
   bool active = false;
 
   Widget build(BuildContext context) {
-    if (widget.provider.getDate == "${widget.month.substring(0, 3)} ${widget.date} ${widget.day}") {
+    final ActivityListProvider provider = Provider.of<ActivityListProvider>(context);
+
+    String date = provider.chosenDate.date;
+    String day = provider.chosenDate.day;
+    String month = provider.chosenDate.month;
+
+    String fullDate = "$month $date $day";
+    
+    if (fullDate == "${widget.month.substring(0, 3)} ${widget.date} ${widget.day}") {
       setState(() {
         active = true; 
       });
@@ -29,7 +38,7 @@ class _DateButtonState extends State<DateButton> {
       child: Container(
         width: 60,
         decoration: BoxDecoration(
-          color: active == true ? Colors.deepPurple : Color.fromRGBO(230, 230, 230, 1),
+          color: active == true ? Colors.deepPurple : Color.fromRGBO(230, 230, 230, 0.5),
           borderRadius: BorderRadius.all(Radius.circular(17)),
           boxShadow: active == true ? [
             BoxShadow(
@@ -62,7 +71,7 @@ class _DateButtonState extends State<DateButton> {
         ),
       ),
       onTap: () {
-        if (widget.provider.getDate == "${widget.month.substring(0, 3)} ${widget.date} ${widget.day}") {
+        if (fullDate == "${widget.month.substring(0, 3)} ${widget.date} ${widget.day}") {
           setState(() {
            active = true; 
           });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/screen/taskScreen.dart';
 import 'package:task_app/themify_icons.dart';
 
 const content = {
@@ -8,7 +9,7 @@ const content = {
   'Sport': {'icon': Themify.basketball, 'subheading': '0'}
 };
 
-List<Widget> activities() {
+List<Widget> activities(BuildContext context) {
   List<Widget> list = [];
 
   content.keys.forEach((x) {
@@ -17,7 +18,7 @@ List<Widget> activities() {
           margin: EdgeInsets.only(top: 10, bottom: 10),
           padding: EdgeInsets.only(top: 5, bottom: 5),
           decoration: BoxDecoration(
-            color: Color.fromRGBO(230, 230, 230, 1),
+            color: Color.fromRGBO(230, 230, 230, 0.5),
             borderRadius: BorderRadius.all(Radius.circular(6))
           ),
           child: ListTile(
@@ -33,6 +34,12 @@ List<Widget> activities() {
               color: Colors.deepPurple,
               size: 16
             ),
+            onTap: () {
+              Navigator.pushNamed(context, 
+                TaskScreen.routeName,
+                arguments: TaskScreenArguments('$x')
+              );
+            },
           ),
         )
     );  
@@ -44,7 +51,7 @@ List<Widget> activities() {
 class ActivityList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
-      children: activities()
+      children: activities(context)
     );
   }
 }
