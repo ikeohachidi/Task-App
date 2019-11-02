@@ -3,8 +3,9 @@ import '../themify_icons.dart';
 
 class TopBar extends StatelessWidget {
   final String text;
+  final Color color;
 
-  TopBar(this.text);
+  TopBar(this.text, {this.color});
 
   Widget build(BuildContext context) {
     return Padding(
@@ -14,14 +15,15 @@ class TopBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Icon(Themify.control_stop),
+          Icon(Themify.control_stop, color: color,),
           Text(
             this.text,
             style: TextStyle(
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
+              color: color
             )
           ),
-          Icon(Themify.timer, size: 20)
+          Icon(Themify.timer, size: 20, color: color,)
         ],
       ),
     );
