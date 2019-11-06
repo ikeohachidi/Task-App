@@ -38,7 +38,7 @@ class _DateButtonState extends State<DateButton> {
       child: Container(
         width: 60,
         decoration: BoxDecoration(
-          color: active == true ? Colors.deepPurple : Color.fromRGBO(230, 230, 230, 0.5),
+          color: active == true ? Theme.of(context).primaryColor : Color.fromRGBO(230, 230, 230, 0.5),
           borderRadius: BorderRadius.all(Radius.circular(17)),
           boxShadow: active == true ? [
             BoxShadow(
