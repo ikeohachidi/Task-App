@@ -22,7 +22,7 @@ List<Widget> activities(BuildContext context) {
             borderRadius: BorderRadius.all(Radius.circular(6))
           ),
           child: ListTile(
-            leading: Icon(content[x]['icon'], color: Colors.deepPurple,),
+            leading: Icon(content[x]['icon'], color: Theme.of(context).primaryColor,),
             title: Text(
               '$x',
               style: TextStyle(
@@ -31,7 +31,7 @@ List<Widget> activities(BuildContext context) {
             ),
             trailing: Icon(
               Themify.angle_right, 
-              color: Colors.deepPurple,
+              color: Theme.of(context).primaryColor,
               size: 16
             ),
             onTap: () {
